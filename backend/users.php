@@ -28,3 +28,20 @@ if ($api == 'GET') {
     echo json_encode($data);
 }
 
+// Add a new user into database
+if ($api == 'POST') {
+    $post_input = json_decode(file_get_contents('php://input'));
+
+    $firstName = $user->check_input($post_input->firstName);
+    $lastName = $user->check_input($post_input->lastName);
+    $dob = $user->check_input($post_input->dob);
+    if ($dob != '')
+        $dob = date('Y-m-d', strtotime($dob));
+
+    if ($user->insert($firstName, $lastName, $dob)) {
+        echo $user->message('User added successfully!', false);
+    } else {
+        echo $user->message('Failed to add an user!', true);
+    }
+}
+

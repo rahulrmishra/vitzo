@@ -15,5 +15,14 @@ class Database extends Config {
         return $stmt->fetchAll();
     }
 
+    // Insert a user in the database
+    public function insert($firstName, $lastName, $dob): bool
+    {
+        $sql = 'INSERT INTO users (first_name, last_name, dob) VALUES (:name, :last_name, :dob)';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['name' => $firstName, 'last_name' => $lastName, 'dob' => $dob]);
+        return true;
+    }
+
 
 }
