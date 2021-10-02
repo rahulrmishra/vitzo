@@ -9,10 +9,10 @@ class Config
     const DB_NAME = 'vitzo';
 
     // Data Source Network
-    private string $dsn = 'mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME . '';
+    private $dsn = 'mysql:host=' . self::DB_HOST . ';dbname=' . self::DB_NAME . '';
 
     // connection variable
-    protected ?PDO $conn = null;
+    protected $conn = null;
 
     // Constructor Function
     public function __construct()
@@ -24,5 +24,20 @@ class Config
             die('Connection Failed : ' . $e->getMessage());
         }
         return $this->conn;
+    }
+
+    // Sanitize Inputs
+    public function check_input($data): string
+    {
+        $data = strip_tags($data);
+        $data = htmlspecialchars($data);
+        $data = stripslashes($data);
+        return trim($data);
+    }
+
+    // JSON Format Converter Function
+    public function message($content, $status)
+    {
+        return json_encode(['message' => $content, 'error' => $status]);
     }
 }
