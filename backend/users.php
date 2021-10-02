@@ -45,3 +45,23 @@ if ($api == 'POST') {
     }
 }
 
+// Update an user in database
+if ($api == 'PUT') {
+    $post_input = json_decode(file_get_contents('php://input'));
+
+    $firstName = $user->check_input($post_input->firstName);
+    $lastName = $user->check_input($post_input->lastName);
+    $dob = $user->check_input($post_input->dob);
+    if ($dob != '')
+        $dob = date('Y-m-d', strtotime($dob));
+
+    if ($id != null) {
+        if ($user->update($firstName, $lastName, $dob, $id)) {
+            echo $user->message('User updated successfully!', false);
+        } else {
+            echo $user->message('Failed to update an user!', true);
+        }
+    } else {
+        echo $user->message('User not found!', true);
+    }
+}

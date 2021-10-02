@@ -24,5 +24,12 @@ class Database extends Config {
         return true;
     }
 
-
+    // Update a user in the database
+    public function update($firstName, $last_name, $dob, $id): bool
+    {
+        $sql = 'UPDATE users SET first_name = :first_name, last_name = :last_name, dob = :dob WHERE id = :id';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['first_name' => $firstName, 'last_name' => $last_name, 'dob' => $dob, 'id' => $id]);
+        return true;
+    }
 }
