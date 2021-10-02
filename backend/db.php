@@ -6,7 +6,7 @@ include_once 'config.php';
 class Database extends Config {
     // Fetch all or a single user from database
     public function fetch($id = 0) {
-        $sql = 'SELECT * FROM users';
+        $sql = 'SELECT id, first_name as firstName,last_name as lastName, DATE_FORMAT(dob,"%m/%d/%Y") as dob FROM users';
         if ($id != 0) {
             $sql .= ' WHERE id = :id';
         }
