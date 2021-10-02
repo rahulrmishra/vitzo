@@ -65,3 +65,16 @@ if ($api == 'PUT') {
         echo $user->message('User not found!', true);
     }
 }
+
+// Delete an user from database
+if ($api == 'DELETE') {
+    if ($id != null) {
+        if ($user->delete($id)) {
+            echo $user->message('User deleted successfully!', false);
+        } else {
+            echo $user->message('Failed to delete an user!', true);
+        }
+    } else {
+        echo $user->message('User not found!', true);
+    }
+}

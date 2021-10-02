@@ -32,4 +32,13 @@ class Database extends Config {
         $stmt->execute(['first_name' => $firstName, 'last_name' => $last_name, 'dob' => $dob, 'id' => $id]);
         return true;
     }
+
+    // Delete an user from database
+    public function delete($id): bool
+    {
+        $sql = 'DELETE FROM users WHERE id = :id';
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        return true;
+    }
 }
