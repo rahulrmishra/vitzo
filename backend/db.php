@@ -3,16 +3,35 @@
 include_once 'config.php';
 
 // Create a class Users
-class Database extends Config {
+class Database extends Config
+{
     // Fetch all or a single user from database
-    public function fetch($id = 0) {
+    public function fetch($id = 0, $pageNo = 0)
+    {
+        $offset = ($pageNo * 20) + 1;
         $sql = 'SELECT id, first_name as firstName,last_name as lastName, DATE_FORMAT(dob,"%m/%d/%Y") as dob FROM users';
         if ($id != 0) {
             $sql .= ' WHERE id = :id';
+        } else {
+            $sql .= ' LIMIT 20 OFFSET ' . $offset;
         }
         $stmt = $this->conn->prepare($sql);
         $stmt->execute(['id' => $id]);
         return $stmt->fetchAll();
+    }
+
+    // Fetch all users count from database
+    public function getCounts($pageNo = 0)
+    {
+        $sql = 'SELECT id FROM users';
+        if ($pageNo > 0) {
+            $offset = ($pageNo * 20) + 1;
+            $sql .= ' LIMIT 20 OFFSET ' . $offset;
+        }
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $stmt->fetchAll();
+        return $stmt->rowCount();
     }
 
     // Insert a user in the database
