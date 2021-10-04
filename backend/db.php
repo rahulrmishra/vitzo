@@ -21,7 +21,7 @@ class Database extends Config
     }
 
     // Fetch all users count from database
-    public function getCounts($pageNo = 0)
+    public function getCounts($pageNo = 0): int
     {
         $sql = 'SELECT id FROM users';
         if ($pageNo > 0) {
@@ -30,7 +30,6 @@ class Database extends Config
         }
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $stmt->fetchAll();
         return $stmt->rowCount();
     }
 
