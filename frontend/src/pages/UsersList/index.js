@@ -1,8 +1,28 @@
-import React from 'react';
-import { Container, Table, Button } from 'react-bootstrap'
+import React, {useCallback} from 'react';
+import { Container, Table, Button, Pagination } from 'react-bootstrap'
+import { useParams, useHistory } from 'react-router-dom';
 
 import users from './users';
 const UsersList = () => {
+    const history = useHistory();
+    const { page = 1 } = useParams();
+    console.log("LLLLL", page);
+    let pageItems = [];
+
+    const pageClicked = (event) => {
+        const pageNumber = parseInt(event.target.text);
+        history.push(`/${pageNumber}`);
+    }
+
+    //use
+    for (let number = 1; number <= users.length / 2; number++) {
+        console.log("AAAAA");
+        pageItems.push(
+            <Pagination.Item key={number} active={number === page} onClick={(event) => pageClicked(event)}>
+                {number}
+            </Pagination.Item>
+        );
+    }
 
     const loadUserData = () => {
         return users.map((user) => {
@@ -30,7 +50,7 @@ const UsersList = () => {
                 </tr>
             </thead>
             <tbody>
-                {loadUserData()}                
+                {loadUserData()}
             </tbody>
         </Table>
     }
@@ -41,6 +61,7 @@ const UsersList = () => {
                 Users List
             </p>
             {loadUserList()}
+            <Pagination>{pageItems}</Pagination>
         </Container>
     );
 }

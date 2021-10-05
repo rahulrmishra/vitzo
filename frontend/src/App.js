@@ -8,7 +8,8 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={routes.ROOT} component={UsersList} exact />
+        <Route path={routes.ROOT_PAGE} component={UsersList} />
+        <Route path={routes.ROOT} component={UsersList} />        
       </Switch>
     </BrowserRouter>
   );
