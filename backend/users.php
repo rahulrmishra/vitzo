@@ -16,16 +16,26 @@ $api = $_SERVER['REQUEST_METHOD'];
 
 // get id from url
 $id = intval($_GET['id'] ?? '');
+$pageNo = intval($_GET['pageNo'] ?? '');
 
 // Get all or a single user from database
 if ($api == 'GET') {
+    $result = array();
     if ($id != 0) {
-        $data = $user->fetch($id);
+        $result = $user->fetch($id);
     } else {
-        $data = $user->fetch();
+        $data = $user->fetch(0, $pageNo);
+        $count = $user->getCounts();
+        $hasMore = $user->getCounts($pageNo + 1);
+        $result['records'] = $data;
+        $result['count'] = $count;
+        $result['hasMore'] = false;
+        if ($hasMore > 0) {
+            $result['hasMore'] = true;
+        }
     }
 
-    echo json_encode($data);
+    echo json_encode($result);
 }
 
 // Add a new user into database
