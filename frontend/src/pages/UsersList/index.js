@@ -3,6 +3,7 @@ import { Container, Table, Button, Pagination } from 'react-bootstrap'
 import { useParams, useHistory } from 'react-router-dom';
 
 import users from './users';
+import './index.css'
 const UsersList = () => {
     const [paginationCount, setpaginationCount] = useState(1);
     const [pageNo, setpageNo] = useState(1);
@@ -16,22 +17,24 @@ const UsersList = () => {
         setpageNo(pageNumber);
         history.push(`/${pageNumber}`);
     }
-
+    const NavigatetoAddUser = (event) => {
+        history.push(`/addUser`);
+    }
     useEffect(() => {
         if(users.length % 20 === 0 ) {
             setpaginationCount(users.length / 20);
         } else {
             setpaginationCount(users.length / 20 + 1);
         }
-        
       setpageNo(page);
       }, []);
     //use
     for (let number = 1; number <= paginationCount; number++) {
         console.log("AAAAA");
         pageItems.push(
-            <Pagination.Item key={number} active={number === page} onClick={(event) => pageClicked(event)}>
+            <Pagination.Item key={number} active={number === pageNo} onClick={(event) => pageClicked(event)}>
                 {number}
+                {/* {pageNo} */}
             </Pagination.Item>
         );
     }
@@ -73,6 +76,7 @@ const UsersList = () => {
             </p>
             {loadUserList()}
             <Pagination>{pageItems}</Pagination>
+            <Button className="addBtn" variant="primary" onClick={NavigatetoAddUser}>Add New user</Button>
         </Container>
     );
 }

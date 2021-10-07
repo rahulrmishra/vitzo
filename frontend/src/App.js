@@ -1,15 +1,16 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { routes } from './utils/constants';
 import { UsersList } from './pages';
+import AddUser from "./pages/addUser";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={routes.ROOT_PAGE} component={UsersList} />
-        <Route path={routes.ROOT} component={UsersList} />        
+        <Route path={routes.ADD_USER} component={AddUser} exact />
+        <Route path={routes.ROOT_PAGE} component={UsersList} exact />
+        <Route path={routes.ROOT} component={UsersList} exact /> 
       </Switch>
     </BrowserRouter>
   );
