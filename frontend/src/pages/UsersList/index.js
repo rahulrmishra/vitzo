@@ -7,6 +7,8 @@ import './index.css'
 const UsersList = () => {
     const [paginationCount, setpaginationCount] = useState(1);
     const [pageNo, setpageNo] = useState(1);
+    const [userList, setUserList] = useState([]);
+    const [userCount, setUserCount] = useState(0);
     const history = useHistory();
     const { page = 1 } = useParams();
     console.log("LLLLL", page);
@@ -15,40 +17,57 @@ const UsersList = () => {
     const pageClicked = (event) => {
         const pageNumber = parseInt(event.target.text);
         setpageNo(pageNumber);
-        history.push(`/${pageNumber}`);
+        loadApiUserData(pageNumber);
+        history.push(`/${pageNumber}`); 
     }
     const NavigatetoAddUser = (event) => {
         history.push(`/addUser`);
     }
-    useEffect(() => {
-        if(users.length % 20 === 0 ) {
-            setpaginationCount(users.length / 20);
-        } else {
-            setpaginationCount(users.length / 20 + 1);
-        }
+    useEffect(() => {      
       setpageNo(page);
+      loadApiUserData(page);
       }, []);
+
     //use
     for (let number = 1; number <= paginationCount; number++) {
-        console.log("AAAAA");
         pageItems.push(
             <Pagination.Item key={number} active={number === pageNo} onClick={(event) => pageClicked(event)}>
                 {number}
-                {/* {pageNo} */}
             </Pagination.Item>
         );
     }
 
+    const loadApiUserData = (pageno) => {
+        const options = {method: 'GET', headers: {Accept: 'application/json'}};
+        fetch(`http://localhost:8080/users.php?pageNo=${pageno-1}`, options)
+            .then(response => response.json())
+            .then(response => {
+                setUserList(response.records);
+                setUserCount(response.count);
+                if(response.count % 20 === 0 ) {
+                    setpaginationCount(response.count / 20);
+                    // setpaginationCount(users.length / 20);
+                } else {
+                    setpaginationCount(response.count / 20 + 1);
+                    // setpaginationCount(users.length / 20 + 1);
+                }
+            })
+            .catch(err => console.error(err));
+        }
+
     const loadUserData = () => {
-        return users.map((user, key) => {
-            return key >= (pageNo-1)*20 && key < pageNo*20 ? (<tr key={user.id}>
+        // return users.map((user, key) => {
+        return userList.map((user) => {
+            return (<tr key={user.id}>
+                {/* return key >= (pageNo-1)*20 && key < pageNo*20 ? (<tr key={user.id}> */}
                 <td>{user.id}</td>
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
-                <td>{user.birthDate}</td>
+                {/* <td>{user.birthDate}</td> */}
+                <td>{user.dob}</td>
                 <td><Button variant="link">Edit</Button></td>
                 <td><Button variant="link">Delete</Button></td>
-            </tr>) : null        
+            </tr>)       
         })
     }
 
