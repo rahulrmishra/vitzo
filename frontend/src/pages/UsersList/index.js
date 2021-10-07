@@ -1,8 +1,7 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect} from 'react';
 import { Container, Table, Button, Pagination } from 'react-bootstrap'
 import { useParams, useHistory } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
-import users from './users';
 import './index.css'
 const UsersList = (props) => {
     const [paginationCount, setpaginationCount] = useState(1);
@@ -13,7 +12,9 @@ const UsersList = (props) => {
     const [selectedUserId, setSelectedUserId] = useState(0);
     const [show, setShow] = useState(false);
 
-    const handleClose = () => {setShow(false) };
+    const handleClose = () => { 
+        setShow(false) 
+    };
     const handleShow = (id) => {
         setShow(true);
         setSelectedUserId(id)
@@ -63,10 +64,8 @@ const UsersList = (props) => {
                 setUserList(response.records);
                 if(response.count % 20 === 0 ) {
                     setpaginationCount(response.count / 20);
-                    // setpaginationCount(users.length / 20);
                 } else {
                     setpaginationCount(response.count / 20 + 1);
-                    // setpaginationCount(users.length / 20 + 1);
                 }
             })
             .catch(err => console.error(err));
@@ -81,14 +80,11 @@ const UsersList = (props) => {
     }
 
     const loadUserData = () => {
-        // return users.map((user, key) => {
         return userList.map((user) => {
             return (<tr key={user.id}>
-                {/* return key >= (pageNo-1)*20 && key < pageNo*20 ? (<tr key={user.id}> */}
                 <td>{user.id}</td>
                 <td>{user.firstName}</td>
                 <td>{user.lastName}</td>
-                {/* <td>{user.birthDate}</td> */}
                 <td>{user.dob}</td>
                 <td><Button variant="link" onClick={() => NavigatetoEditUser(user.id,user.firstName,user.lastName,user.dob)}>Edit</Button></td>
                 <td><Button variant="link" onClick={() => handleShow(user.id)}>Delete</Button></td>
@@ -115,9 +111,7 @@ const UsersList = (props) => {
     }
     return (
         <Container>
-            <p>
-                Users List
-            </p>
+            <h5> Users List </h5>
             {loadUserList()}
             <Pagination>{pageItems}</Pagination>
             <Button className="addBtn" variant="primary" onClick={NavigatetoAddUser}>Add user</Button>
