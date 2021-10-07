@@ -4,11 +4,10 @@ import { useParams, useHistory } from 'react-router-dom';
 
 import users from './users';
 import './index.css'
-const UsersList = () => {
+const UsersList = (props) => {
     const [paginationCount, setpaginationCount] = useState(1);
     const [pageNo, setpageNo] = useState(1);
     const [userList, setUserList] = useState([]);
-    const [userCount, setUserCount] = useState(0);
     const history = useHistory();
     const { page = 1 } = useParams();
     console.log("LLLLL", page);
@@ -22,6 +21,17 @@ const UsersList = () => {
     }
     const NavigatetoAddUser = (event) => {
         history.push(`/addUser`);
+    }
+    const NavigatetoEditUser = (id, fName, lName, dob) => {
+        props.history.push({
+            pathname: `/editUser/${id}`,
+            state: [{
+                userId: id,
+                firstName: fName,
+                lastName: lName,
+                dob: dob
+            }] // your data array of objects
+          })
     }
     useEffect(() => {      
       setpageNo(page);
@@ -43,7 +53,6 @@ const UsersList = () => {
             .then(response => response.json())
             .then(response => {
                 setUserList(response.records);
-                setUserCount(response.count);
                 if(response.count % 20 === 0 ) {
                     setpaginationCount(response.count / 20);
                     // setpaginationCount(users.length / 20);
@@ -65,7 +74,7 @@ const UsersList = () => {
                 <td>{user.lastName}</td>
                 {/* <td>{user.birthDate}</td> */}
                 <td>{user.dob}</td>
-                <td><Button variant="link">Edit</Button></td>
+                <td><Button variant="link" onClick={() => NavigatetoEditUser(user.id,user.firstName,user.lastName,user.dob)}>Edit</Button></td>
                 <td><Button variant="link">Delete</Button></td>
             </tr>)       
         })

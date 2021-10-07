@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import { Container, Button, Row, Col } from 'react-bootstrap';
+import { useParams, useHistory } from 'react-router-dom';
 import './addUser.css';
 
 const AddUser = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [DOB, setDOB] = useState('');
+    const history = useHistory();
 
     const getFirstName = (value) => {
         console.log('first Name: ', value);
@@ -24,6 +26,11 @@ const AddUser = () => {
             setDOB(dateStr);
             console.log('DOB: ', dateStr);
         }
+    }
+
+    const cancelAdd = () => {
+        history.push(`/`);
+        
     }
 
     const addUser = () => {
@@ -65,7 +72,7 @@ const AddUser = () => {
                             {/* <DatePicker id="example-datepicker" value={new Date().toISOString()} /> */}
                         </Form.Group>           
                         <Button className='formBtn' variant="primary" onClick={addUser}>Add</Button>
-                        <Button variant="secondary">Cancel</Button>
+                        <Button variant="secondary" onClick={cancelAdd}>Cancel</Button>
                     </Form>
                 </Col>
             </Row>
